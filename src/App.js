@@ -31,23 +31,46 @@ class App extends Component {
   getVehicles() {
     // axios (GET)
     // setState with response -> vehiclesToDisplay
+    axios.get('https://joes-autos.herokuapp.com/api/vehicles').then(response =>{
+      // console.log('response', response)
+      toast.success('Successfully got vehicles!')
+      this.setState({
+        vehiclesToDisplay: response.data
+      })
+    }).catch(error => toast.error('Could not retrieve vehicles!'))
   }
 
   getPotentialBuyers() {
+    axios.get('https://joes-autos.herokuapp.com/api/buyers').then(response => {
+      toast.success('Sucessfully got Buyers')
+      this.setState({
+        buyersToDisplay: response.data
+      })
+    }).catch(error => toast.error('Could not retrieve buyers'))
     // axios (GET)
     // setState with response -> buyersToDisplay
+
   }
 
   sellCar(id) {
     // axios (DELETE)
     // setState with response -> vehiclesToDisplay
+    axios.delete(`https://joes-autos.herokuapp.com/api/vehicles/${id}`).then(response =>{
+      // console.log('response in delete', response)
+      this.setState({vehiclesToDisplay:response.data.vehicles})
+    })
   }
 
   filterByMake() {
     let make = this.selectedMake.value;
-
     // axios (GET)
     // setState with response -> vehiclesToDisplay
+    axios.get(`https://joes-autos.herokuapp.com/api/vehicles?make=${make}`).then(response =>{
+      // console.log('response',response)
+      this.setState({
+        vehiclesToDisplay : response.data
+      })
+    })
   }
 
   filterByColor() {
@@ -55,11 +78,23 @@ class App extends Component {
 
     // axios (GET)
     // setState with response -> vehiclesToDisplay
+    axios.get(`https://joes-autos.herokuapp.com/api/vehicles?color=${color}`).then(response =>{
+      // console.log('response',response)
+      this.setState({
+        vehiclesToDisplay : response.data
+      })
+    })
   }
 
   updatePrice(priceChange, id) {
     // axios (PUT)
     // setState with response -> vehiclesToDisplay
+    axios.put(`https://joes-autos.herokuapp.com/api/vehicles/${id}/${priceChange}`).then(response =>{
+      // console.log('response',response)
+      this.setState({
+        vehiclesToDisplay: response.data.vehicles
+      })
+    })
   }
 
   addCar() {
@@ -73,6 +108,11 @@ class App extends Component {
 
     // axios (POST)
     // setState with response -> vehiclesToDisplay
+    axios.post('https://joes-autos.herokuapp.com/api/vehicles', newCar).then(response => {
+      // console.log('response',response)
+      this.setState({
+        vehiclesToDisplay: response.data.vehicles})
+    })
   }
 
   addBuyer() {
@@ -84,18 +124,35 @@ class App extends Component {
 
     //axios (POST)
     // setState with response -> buyersToDisplay
+    axios.post('https://joes-autos.herokuapp.com/api/buyers', newBuyer).then(response =>{
+      toast.success ('Added buyer')
+      this.setState({
+        buyersToDisplay:response.data.buyers
+      })
+    }).catch(error =>toast.error('Could not add Buyer'))
   }
 
   deleteBuyer(id) {
     // axios (DELETE)
-    //setState with response -> buyersToDisplay
+    axios.delete(`https://joes-autos.herokuapp.com/api/buyers/${id}`).then(response =>{
+      // console.log('response in delete', response)
+      toast.success('deleted buyer')
+      this.setState({vehiclesToDisplay:response.data.buyers})
+    })
   }
-
   nameSearch() {
     let searchLetters = this.searchLetters.value;
 
     // axios (GET)
     // setState with response -> buyersToDisplay
+    // axios (GET)
+    // setState with response -> vehiclesToDisplay
+    axios.get(`https://joes-autos.herokuapp.com/api/buyers?name=${searchLetters}`).then(response =>{
+      toast.success ('Searched buysers by name')
+      this.setState({
+        buyersToDisplay : response.data
+      })
+    }).catch(error =>toast.error('Could not find buyer'))
   }
 
   byYear() {
@@ -103,6 +160,12 @@ class App extends Component {
 
     // axios (GET)
     // setState with response -> vehiclesToDisplay
+    axios.get(`https://joes-autos.herokuapp.com/api/vehicles?year=${year}`).then(response =>{
+      toast.success('Searched vehicles by year')
+      this.setState({
+        vehiclesToDisplay : response.data
+      })
+    }).catch(error =>toast.error('Could not find vehicle'))
   }
 
   // Do not edit the code below
